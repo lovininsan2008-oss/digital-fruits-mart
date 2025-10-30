@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Digital Fruits Mart</title>
+<style>
+body { margin:0; padding:0; font-family: Arial, sans-serif; background:#f2f8ff; }
+header { background:#007bff; color:white; padding:12px; text-align:center; font-size:22px; font-weight:bold; }
+.container { padding:12px; }
+.item { display:flex; justify-content:space-between; align-items:center; background:white; padding:14px; margin:10px 0; border-radius:12px; box-shadow:0 1px 4px rgba(0,0,0,0.15); }
+.name { font-size:18px; font-weight:600; color:#333; width:60%; }
+.controls { display:flex; align-items:center; }
+button { width:36px; height:36px; border:none; border-radius:8px; font-size:20px; background:#007bff; color:white; }
+.qty { margin:0 10px; min-width:24px; text-align:center; font-size:20px; }
+#bill { position:fixed; bottom:0; left:0; right:0; background:#007bff; color:white; font-size:22px; text-align:center; padding:15px; font-weight:bold; }
+</style>
+</head>
+<body>
+
+<header>Digital Fruits Mart</header>
+<div class="container" id="items"></div>
+<div id="bill">Total: ₹0</div>
+
+<script>
+const products = [
+  {name:"Apple", price:100},
+  {name:"Banana", price:30},
+  {name:"Watermelon", price:40},
+  {name:"Mango", price:120},
+  {name:"Grapes", price:90},
+  {name:"Tomato", price:30},
+  {name:"Potato", price:25},
+  {name:"Onion", price:28},
+  {name:"Carrot", price:60},
+  {name:"Spinach (bunch)", price:20},
+  {name:"Cauliflower", price:45}
+];
+
+let cart = Array(products.length).fill(0);
+
+function render(){
+  const itemsDiv = document.getElementById("items");
+  itemsDiv.innerHTML = "";
+  products.forEach((p,i)=>{
+    itemsDiv.innerHTML += `
+      <div class="item">
+        <div class="name">${p.name}<br><span style="font-size:14px;color:#666;">₹${p.price}/kg</span></div>
+        <div class="controls">
+          <button onclick="changeQty(${i},-1)">-</button>
+          <span class="qty">${cart[i]}</span>
+          <button onclick="changeQty(${i},1)">+</button>
+        </div>
+      </div>
+    `;
+  });
+  updateBill();
+}
+
+function changeQty(i,delta){
+  cart[i] = Math.max(0, cart[i] + delta);
+  render();
+}
+
+function updateBill(){
+  let total = cart.reduce((sum, qty, i)=> sum + qty * products[i].price, 0);
+  document.getElementById("bill").innerText = "Total: ₹" + total;
+}
+
+render();
+</script>
+
+</body>
+</html>
